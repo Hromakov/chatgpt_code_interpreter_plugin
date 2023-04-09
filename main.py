@@ -12,15 +12,20 @@ _SERVICE_AUTH_KEY = os.environ.get("_SERVICE_AUTH_KEY")
 def assert_auth_header(req):
     assert req.headers.get("Authorization", None) == f"Bearer {_SERVICE_AUTH_KEY}"
 
-def execute_code(code_string):
+def execute_code(code_string, local_vars=None):
+    import sys
+    from io import StringIO
+
+    if local_vars is None:
+        local_vars = {}
 
     # Redirect stdout to a string buffer
     original_stdout = sys.stdout
     sys.stdout = StringIO()
 
     try:
-        # Execute the code string
-        exec(code_string)
+        # Execute the code string with the provided local variables
+        exec(code_string, local_vars, local_vars)  # Pass local_vars as the global namespace as well
         # Get the output from the string buffer
         result = sys.stdout.getvalue()
     except Exception as e:
@@ -51,7 +56,7 @@ async def getCodeExecutionResults():
     print(input_data)
     code_string = input_data['code']
     print(code_string)
-    result = execute_code(code_string)
+    result = execute_code("__name__=\"__main__\"\n"+code_string)
     print("Result:", result)
 
     
