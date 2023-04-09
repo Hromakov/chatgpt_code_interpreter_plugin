@@ -3,7 +3,7 @@
   "name_for_human": "Code interpreter plugin",
   "name_for_model": "CodeInterpreterPlugin",
   "description_for_human": "Code interpreter",
-  "description_for_model": "Use this plugin execute code and get back the execution result",
+  "description_for_model": "Send your code to this plugin and get back the execution result that was printed using print()",
   "auth": {
     "type": "service_http",
     "authorization_type": "bearer",

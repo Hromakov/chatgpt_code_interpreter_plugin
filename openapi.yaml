@@ -6,10 +6,10 @@ info:
 servers:
   - url: https://chatgptcodeinterpretplugin.vovakhromakov.repl.co
 paths:
-  /executeCode:
+  /getCodeExecutionResults:
     post:
-      operationId: executeCode
-      summary: execute code and returns the execution result
+      operationId: getCodeExecutionResults
+      summary: get code execution results
       requestBody:
         required: true
         content:
@@ -28,9 +28,12 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties:
-                  type: string
-                description: Result of the code execution
+                required: 
+                - codeExecutionResult
+                properties:
+                  codeExecutionResult:
+                    type: string
+                    description: Result of the code execution
         "400":
           description: Bad Request
           content:

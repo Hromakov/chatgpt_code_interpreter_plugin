@@ -3,6 +3,8 @@ import quart
 import quart_cors
 from quart import request
 from bs4 import BeautifulSoup, Comment
+import sys
+from io import StringIO
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 _SERVICE_AUTH_KEY = os.environ.get("_SERVICE_AUTH_KEY")
@@ -10,9 +12,35 @@ _SERVICE_AUTH_KEY = os.environ.get("_SERVICE_AUTH_KEY")
 def assert_auth_header(req):
     assert req.headers.get("Authorization", None) == f"Bearer {_SERVICE_AUTH_KEY}"
 
+def execute_code(code_string):
 
-@app.route('/executeCode', methods=['POST'])
-async def executeCode():
+    # Redirect stdout to a string buffer
+    original_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        # Execute the code string
+        exec(code_string)
+        # Get the output from the string buffer
+        result = sys.stdout.getvalue()
+    except Exception as e:
+        result = str(e)
+    finally:
+        # Restore the original stdout
+        sys.stdout = original_stdout
+
+    return result
+
+# Example usage
+code_string = '''
+import math
+print(math.sqrt(16))
+'''
+result = execute_code(code_string)
+print("Result:", result)
+  
+@app.route('/getCodeExecutionResults', methods=['POST'])
+async def getCodeExecutionResults():
     assert_auth_header(request)
 
     input_data = await request.get_json()
@@ -20,20 +48,14 @@ async def executeCode():
     if not input_data or not input_data.get('code'):
         return quart.Response(response='Missing input data', status=400)
 
-    
-    code_string = input_data('code')
+    print(input_data)
+    code_string = input_data['code']
     print(code_string)
-    try:
-        # Use eval to execute the string as an expression
-        result = eval(code_string)
-    except SyntaxError:
-        try:
-            # Use exec to execute the string as a statement
-            exec(code_string)
-            result = None
-        except Exception as e:
-            result = f"Error: {str(e)}"
-    return result
+    result = execute_code(code_string)
+    print("Result:", result)
+
+    
+    return quart.Response(response=result, status=200)
 
 
 
