@@ -1,0 +1,44 @@
+openapi: 3.0.1
+info:
+  title: Code interpret plugin
+  description: Use this plugin to execute python code
+  version: 'v1'
+servers:
+  - url: https://chatgpt-browsing-plugin.vovakhromakov.repl.co
+paths:
+  /executeCode:
+    post:
+      operationId: executeCode
+      summary: execute code and returns the execution result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: python code to be executed
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                description: Result of the code execution
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
