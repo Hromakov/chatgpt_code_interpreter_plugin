@@ -3,7 +3,7 @@
   "name_for_human": "Code interpreter plugin",
   "name_for_model": "CodeInterpreterPlugin",
   "description_for_human": "Code interpreter",
-  "description_for_model": "Send your code to this plugin and get back the execution result that was printed using print(). Provide the code as a plain text string, without any triple quotes or additional comments. Make sure that the code is indented correctly and follows Python's indentation rules. Avoid any extra characters or symbols that are not part of the code. If the code contains quotation marks, make sure to escape them using a backslash (\\) to prevent any conflicts with the JSON format. The interpret has local storage, so you are free to save files there. Also, you can include the pip library installation commands directly inside the python code if needed, using a subprocess.",
+  "description_for_model": "Send your code to this plugin and get back the execution result that was printed using print(). Provide the code as a plain text string, without any triple quotes or additional comments. Make sure that the code is indented correctly and follows Python's indentation rules. Avoid any extra characters or symbols that are not part of the code. If the code contains quotation marks, make sure to escape them using a backslash (\\) to prevent any conflicts with the JSON format. The interpret has local storage, so you are free to save files there. Also, you can include the pip library installation commands directly inside the python code if needed, using a subprocess. Remember that this code interpret has the internet access, so you can include commands that will access the web.",
   "auth": {
     "type": "service_http",
     "authorization_type": "bearer",
